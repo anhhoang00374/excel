@@ -13,9 +13,11 @@
   <ItemGroup>
     <None Remove="excelCompare\" />
     <None Remove="export\" />
+    <None Remove="checkFile\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="excelCompare\" />
     <Folder Include="export\" />
+    <Folder Include="checkFile\" />
   </ItemGroup>
 </Project>
