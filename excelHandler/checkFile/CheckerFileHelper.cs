@@ -1,4 +1,6 @@
 ﻿using System;
+using OfficeOpenXml;
+
 namespace checkFileHelper
 {
 	public class CheckerFileHelper
@@ -17,7 +19,7 @@ namespace checkFileHelper
                 {
                     // Lấy danh sách tất cả các file trong thư mục
                     string[] files = Directory.GetFiles(path);
-
+                    String[] d = Directory.GetDirectories(path);
                     // Lọc ra các file có đuôi .xlsx, .xlsm, .xltx, .xltm, .xlam, .xlsb (định dạng file Excel hỗ trợ bởi EPPlus)
                     foreach (string file in files)
                     {
@@ -26,8 +28,15 @@ namespace checkFileHelper
                             extension == ".xltm" || extension == ".xlam" || extension == ".xlsb")
                         {
                             excelFiles.Add(file);
-                            Console.WriteLine(file);
+                            
                         }
+                        Console.WriteLine(Path.GetExtension(file).ToLower());
+                        Console.WriteLine(Path.GetFileName(file));
+                    }
+                    foreach (string file in d)
+                    {
+                        
+                        Console.WriteLine(file);
                     }
                 }
                 else
@@ -42,6 +51,33 @@ namespace checkFileHelper
             }
 
             return excelFiles;
+        }
+
+        internal void checkFile(List<string> listFile)
+        {
+            foreach(var file in listFile)
+            {
+                using (var package = new ExcelPackage(file))
+                {
+                    ExcelWorkbook workbook = package.Workbook;
+                    ExcelWorksheets worksheets = workbook.Worksheets;
+                    foreach(var sheet in worksheets)
+                    {
+                        if(sheet.Name != null)
+                        {
+                            checkSheet(sheet);
+                        }
+                    }
+                    package.Save();
+                }
+            }
+            
+        }
+        private List<String> checkSheet(ExcelWorksheet excelWorksheet)
+        {
+            var row = excelWorksheet.Column(1);
+            row.Width = 100;
+            return null;
         }
     }
 }
